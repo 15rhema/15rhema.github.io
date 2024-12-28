@@ -27,18 +27,11 @@
                     Coming soon. Join the waitlist for early access.
                 </p>
                 <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                    <form id="waitlistForm" class="w-full max-w-md">
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="email" id="email" 
-                                   class="flex-1 rounded-md border border-gray-300 px-4 py-3 text-base" 
-                                   placeholder="Enter your email" required>
-                            <button type="submit" 
-                                    class="rounded-md bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 sm:flex-none">
-                                Join Waitlist
-                            </button>
-                        </div>
-                        <p id="formStatus" class="mt-2 text-sm"></p>
-                    </form>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgr6Rc8PkUhHsGivvJ8SEP7uAcBLiw-7tczW89PoMnAmzj5A/viewform?usp=dialog" 
+                       target="_blank"
+                       class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+                        Join Waitlist
+                    </a>
                 </div>
             </div>
         </div>
@@ -59,68 +52,5 @@
         </div>
     </footer>
 
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js';
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDjNIQQTNsaQe50nRP2qkoCEu8L_2W5CNw",
-    authDomain: "platrs.firebaseapp.com",
-    projectId: "platrs",
-    storageBucket: "platrs.firebasestorage.app",
-    messagingSenderId: "195011567614",
-    appId: "1:195011567614:web:176c71d8b928eee01c2aaf",
-    measurementId: "G-TS5DFNP1RN"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-   // Initialize Firestore and store it in a variable that's accessible to the form handler
-   const db = getFirestore(app);
-          document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('waitlistForm');
-        if (form) {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const emailInput = document.getElementById('email');
-                const statusElement = document.getElementById('formStatus');
-                const submitButton = e.target.querySelector('button');
-
-                // Disable form while submitting
-                emailInput.disabled = true;
-                submitButton.disabled = true;
-                statusElement.textContent = 'Submitting...';
-                statusElement.className = 'mt-2 text-sm text-gray-600';
-
-                try {
-                    // This is the corrected syntax for adding a document
-                    const waitlistCollection = collection(db, 'waitlist');
-                    await addDoc(waitlistCollection, {
-                        email: emailInput.value.toLowerCase(),
-                        timestamp: serverTimestamp(),
-                        userAgent: navigator.userAgent
-                    });
-
-                    emailInput.value = '';
-                    statusElement.textContent = 'Thanks for joining the waitlist!';
-                    statusElement.className = 'mt-2 text-sm text-green-600';
-                } catch (error) {
-                    console.error('Error:', error);
-                    statusElement.textContent = 'Error submitting. Please try again.';
-                    statusElement.className = 'mt-2 text-sm text-red-600';
-                }
-
-                // Re-enable form
-                emailInput.disabled = false;
-                submitButton.disabled = false;
-            });
-        }
-    });
-    </script>
 </body>
 </html>
