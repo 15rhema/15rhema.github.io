@@ -82,49 +82,45 @@
   const app = initializeApp(firebaseConfig);
    // Initialize Firestore and store it in a variable that's accessible to the form handler
    const db = getFirestore(app);
-        document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const emailInput = document.getElementById('email');
-            const statusElement = document.getElementById('formStatus');
-            const submitButton = e.target.querySelector('button');
+          document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('waitlistForm');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const emailInput = document.getElementById('email');
+                const statusElement = document.getElementById('formStatus');
+                const submitButton = e.target.querySelector('button');
 
-            // Disable form while submitting
-            emailInput.disabled = true;
-            submitButton.disabled = true;
-            statusElement.textContent = 'Submitting...';
-            statusElement.className = 'mt-2 text-sm text-gray-600';
+                // Disable form while submitting
+                emailInput.disabled = true;
+                submitButton.disabled = true;
+                statusElement.textContent = 'Submitting...';
+                statusElement.className = 'mt-2 text-sm text-gray-600';
 
-            try {
-                // Check if email already exists
-                const existingEmails = await db.collection('waitlist')
-                    .where('email', '==', emailInput.value.toLowerCase())
-                    .get();
-
-                if (!existingEmails.empty) {
-                    statusElement.textContent = 'This email is already on the waitlist!';
-                    statusElement.className = 'mt-2 text-sm text-yellow-600';
-                } else {
-                    // Add new email to waitlist
-                    await db.collection('waitlist').add({
+                try {
+                    // This is the corrected syntax for adding a document
+                    const waitlistCollection = collection(db, 'waitlist');
+                    await addDoc(waitlistCollection, {
                         email: emailInput.value.toLowerCase(),
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        timestamp: serverTimestamp(),
                         userAgent: navigator.userAgent
                     });
 
                     emailInput.value = '';
                     statusElement.textContent = 'Thanks for joining the waitlist!';
                     statusElement.className = 'mt-2 text-sm text-green-600';
+                } catch (error) {
+                    console.error('Error:', error);
+                    statusElement.textContent = 'Error submitting. Please try again.';
+                    statusElement.className = 'mt-2 text-sm text-red-600';
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                statusElement.textContent = 'Error submitting. Please try again.';
-                statusElement.className = 'mt-2 text-sm text-red-600';
-            }
 
-            // Re-enable form
-            emailInput.disabled = false;
-            submitButton.disabled = false;
-        });
+                // Re-enable form
+                emailInput.disabled = false;
+                submitButton.disabled = false;
+            });
+        }
+    });
     </script>
 </body>
 </html>
