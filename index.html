@@ -59,28 +59,28 @@
         </div>
     </footer>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-   
-    <script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    // Initialize Firebase first
-    const app = firebase.initializeApp({
-       apiKey: "AIzaSyDjNIQQTNsaQe50nRP2qkoCEu8L_2W5CNw",
-          authDomain: "platrs.firebaseapp.com",
-          projectId: "platrs",
-          storageBucket: "platrs.firebasestorage.app",
-          messagingSenderId: "195011567614",
-          appId: "1:195011567614:web:176c71d8b928eee01c2aaf",
-          measurementId: "G-TS5DFNP1RN"
-    });
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjNIQQTNsaQe50nRP2qkoCEu8L_2W5CNw",
+    authDomain: "platrs.firebaseapp.com",
+    projectId: "platrs",
+    storageBucket: "platrs.firebasestorage.app",
+    messagingSenderId: "195011567614",
+    appId: "1:195011567614:web:176c71d8b928eee01c2aaf",
+    measurementId: "G-TS5DFNP1RN"
+  };
 
-    // Then get Firestore instance
-    const db = firebase.firestore();
-        const analytics = getAnalytics(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 
         document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
             e.preventDefault();
