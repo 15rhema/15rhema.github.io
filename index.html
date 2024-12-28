@@ -81,7 +81,7 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
    // Initialize Firestore and store it in a variable that's accessible to the form handler
-    const db = firebase.firestore();
+   const db = getFirestore(app);
         document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('email');
