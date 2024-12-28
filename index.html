@@ -27,12 +27,18 @@
                     Coming soon. Join the waitlist for early access.
                 </p>
                 <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                    <div class="rounded-md shadow">
-                        <a href="#"
-                            class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
-                            Join Waitlist
-                        </a>
-                    </div>
+                    <form id="waitlistForm" class="w-full max-w-md">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input type="email" id="email" 
+                                   class="flex-1 rounded-md border border-gray-300 px-4 py-3 text-base" 
+                                   placeholder="Enter your email" required>
+                            <button type="submit" 
+                                    class="rounded-md bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 sm:flex-none">
+                                Join Waitlist
+                            </button>
+                        </div>
+                        <p id="formStatus" class="mt-2 text-sm"></p>
+                    </form>
                 </div>
             </div>
         </div>
@@ -52,5 +58,60 @@
             </div>
         </div>
     </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/config.js"></script>
+    <script>
+
+        
+        firebase.initializeApp(window.firebaseConfig);
+        const db = firebase.firestore();
+
+        document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('email');
+            const statusElement = document.getElementById('formStatus');
+            const submitButton = e.target.querySelector('button');
+
+            // Disable form while submitting
+            emailInput.disabled = true;
+            submitButton.disabled = true;
+            statusElement.textContent = 'Submitting...';
+            statusElement.className = 'mt-2 text-sm text-gray-600';
+
+            try {
+                // Check if email already exists
+                const existingEmails = await db.collection('waitlist')
+                    .where('email', '==', emailInput.value.toLowerCase())
+                    .get();
+
+                if (!existingEmails.empty) {
+                    statusElement.textContent = 'This email is already on the waitlist!';
+                    statusElement.className = 'mt-2 text-sm text-yellow-600';
+                } else {
+                    // Add new email to waitlist
+                    await db.collection('waitlist').add({
+                        email: emailInput.value.toLowerCase(),
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        userAgent: navigator.userAgent
+                    });
+
+                    emailInput.value = '';
+                    statusElement.textContent = 'Thanks for joining the waitlist!';
+                    statusElement.className = 'mt-2 text-sm text-green-600';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusElement.textContent = 'Error submitting. Please try again.';
+                statusElement.className = 'mt-2 text-sm text-red-600';
+            }
+
+            // Re-enable form
+            emailInput.disabled = false;
+            submitButton.disabled = false;
+        });
+    </script>
 </body>
 </html>
