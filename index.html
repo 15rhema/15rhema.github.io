@@ -6,7 +6,8 @@
     <title>PLATRS - Your Food Journey Starts Here</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
+<!-- Add min-h-screen and flex flex-col to make body take full height and enable flex layout -->
+<body class="bg-gray-50 min-h-screen flex flex-col">
     <nav class="border-b bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -16,7 +17,8 @@
             </div>
         </div>
     </nav>
-    <main>
+    <!-- Add flex-grow to make main content expand and push footer down -->
+    <main class="flex-grow">
         <div class="max-w-5xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
@@ -36,7 +38,8 @@
             </div>
         </div>
     </main>
-    <footer class="bg-white border-t mt-auto">
+    <!-- Remove mt-auto from footer since we're using flex-grow on main -->
+    <footer class="bg-white border-t">
         <div class="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <div class="flex justify-center space-x-6 md:space-x-12">
                 <a href="/legal/privacy-policy" class="text-gray-500 hover:text-gray-600 text-sm">
@@ -51,6 +54,5 @@
             </div>
         </div>
     </footer>
-
 </body>
 </html>
